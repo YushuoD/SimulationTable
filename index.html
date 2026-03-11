@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post-Fire Flood Warning Simulator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cesium@1.139.1/Build/Cesium/Widgets/widgets.css" />
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <aside class="panel">
+        <h1>Post-Fire Flood Simulator</h1>
+        <p class="small">
+          3D terrain + particle routing for post-fire runoff. Use outputs as planning support, not as an official emergency forecast.
+        </p>
+
+        <section>
+          <h2>Basemap / Terrain</h2>
+          <label>
+            Cesium ion token (optional)
+            <input id="ionToken" placeholder="Paste Cesium token for high-quality terrain" />
+          </label>
+          <label>
+            Google Map Tiles API key (optional visual layer)
+            <input id="googleApiKey" placeholder="Enables Google Photorealistic 3D Tiles if provided" />
+          </label>
+          <button id="initViewerBtn">Initialize 3D Map</button>
+        </section>
+
+        <section>
+          <h2>Scenario</h2>
+          <div class="grid2">
+            <label>
+              Center Lat
+              <input id="centerLat" type="number" value="39.1178" step="0.0001" />
+            </label>
+            <label>
+              Center Lon
+              <input id="centerLon" type="number" value="-106.4454" step="0.0001" />
+            </label>
+          </div>
+          <div class="grid2">
+            <label>
+              Study area half-width (km)
+              <input id="extentKm" type="number" value="8" min="1" max="60" step="1" />
+            </label>
+            <label>
+              Burn scar radius (km)
+              <input id="burnScarKm" type="number" value="2.2" min="0.5" max="20" step="0.1" />
+            </label>
+          </div>
+          <div class="grid2">
+            <label>
+              Rainfall (mm/hr)
+              <input id="rainMmHr" type="number" value="40" min="1" max="250" step="1" />
+            </label>
+            <label>
+              Burn severity (0-1)
+              <input id="burnSeverity" type="number" value="0.8" min="0" max="1" step="0.05" />
+            </label>
+          </div>
+          <div class="grid2">
+            <label>
+              Grid resolution
+              <input id="resolution" type="number" value="44" min="20" max="90" step="2" />
+            </label>
+            <label>
+              Particles
+              <input id="particleCount" type="number" value="700" min="100" max="3000" step="50" />
+            </label>
+          </div>
+          <div class="grid2">
+            <label>
+              Time steps
+              <input id="steps" type="number" value="220" min="40" max="800" step="10" />
+            </label>
+            <label>
+              Time step (s)
+              <input id="dt" type="number" value="3" min="0.5" max="20" step="0.5" />
+            </label>
+          </div>
+          <div class="buttonRow">
+            <button id="loadTerrainBtn">Load Terrain Grid</button>
+            <button id="runBtn">Run Flood Simulation</button>
+          </div>
+        </section>
+
+        <section>
+          <h2>Hazard Legend</h2>
+          <ul class="legend">
+            <li><span class="swatch high"></span>High likely flood routing</li>
+            <li><span class="swatch medium"></span>Moderate likely flood routing</li>
+            <li><span class="swatch low"></span>Low routed runoff</li>
+          </ul>
+        </section>
+
+        <pre id="status">Waiting for initialization.</pre>
+      </aside>
+      <main id="cesiumContainer"></main>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
