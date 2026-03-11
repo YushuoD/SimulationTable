@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post-Fire Flood Simulation | USA Mountain Terrain</title>
+  <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  
+  <div id="controlPanel">
+    <header>
+      <h1>Post-Fire Flood Simulator</h1>
+      <p class="subtitle">Particle-based flood path prediction on 3D terrain</p>
+    </header>
+
+    <section class="controls">
+      <h3>Simulation Parameters</h3>
+      
+      <div class="control-group">
+        <label>Burn Severity</label>
+        <select id="burnSeverity">
+          <option value="unburned">Unburned (baseline)</option>
+          <option value="low">Low severity</option>
+          <option value="moderate" selected>Moderate severity</option>
+          <option value="high">High severity</option>
+        </select>
+        <span class="hint">Higher severity = less infiltration, more runoff</span>
+      </div>
+
+      <div class="control-group">
+        <label>Rainfall Intensity (mm/hr)</label>
+        <input type="range" id="rainfallIntensity" min="5" max="100" value="25" />
+        <span id="rainfallValue">25 mm/hr</span>
+      </div>
+
+      <div class="control-group">
+        <label>Particle Count</label>
+        <input type="range" id="particleCount" min="100" max="2000" value="500" step="100" />
+        <span id="particleCountValue">500</span>
+      </div>
+
+      <div class="control-group">
+        <label>Simulation Speed</label>
+        <input type="range" id="simSpeed" min="0.5" max="5" value="1" step="0.5" />
+        <span id="simSpeedValue">1x</span>
+      </div>
+    </section>
+
+    <section class="actions">
+      <button id="startSim" class="btn primary">Start Simulation</button>
+      <button id="stopSim" class="btn secondary">Stop</button>
+      <button id="clearSim" class="btn">Clear</button>
+    </section>
+
+    <section class="instructions">
+      <h3>How to Use</h3>
+      <ol>
+        <li>Pan/zoom to a mountain area in the USA</li>
+        <li>Click on terrain to set flood source point</li>
+        <li>Adjust burn severity & rainfall</li>
+        <li>Click Start to simulate flood path</li>
+        <li><strong>Red zones</strong> = high flood risk</li>
+      </ol>
+    </section>
+
+    <section class="legend">
+      <h3>Flood Risk Legend</h3>
+      <div class="legend-item high">High risk (immediate flow)</div>
+      <div class="legend-item medium">Medium risk (secondary paths)</div>
+      <div class="legend-item low">Low risk (potential accumulation)</div>
+    </section>
+  </div>
+
+  <div id="statusBar">
+    <span id="statusText">Click on terrain to set flood source</span>
+    <span id="particleStats">Particles: 0 | Path cells: 0</span>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
