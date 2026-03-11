@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Post-Fire Flood Mountain Simulation</title>
+  </head>
+  <body>
+    <div id="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <p class="eyebrow">Terrain-aware hazard prototype</p>
+          <h1>Post-Fire Flood Warning Simulator</h1>
+          <p class="lede">
+            Explore how flood runoff can accelerate downslope after wildfire
+            damage using real public terrain elevation data across the USA.
+          </p>
+        </div>
+
+        <section class="panel">
+          <h2>Scenario setup</h2>
+
+          <label class="field">
+            <span>Preset region</span>
+            <select id="preset-select"></select>
+          </label>
+
+          <label class="field">
+            <span>Burn scar latitude</span>
+            <input id="lat-input" type="number" step="0.0001" />
+          </label>
+
+          <label class="field">
+            <span>Burn scar longitude</span>
+            <input id="lng-input" type="number" step="0.0001" />
+          </label>
+
+          <label class="field">
+            <span>Study width (km)</span>
+            <input id="extent-input" type="range" min="4" max="30" step="1" />
+            <strong id="extent-value"></strong>
+          </label>
+
+          <label class="field">
+            <span>Rainfall intensity (mm/hr)</span>
+            <input id="rainfall-input" type="range" min="10" max="120" step="1" />
+            <strong id="rainfall-value"></strong>
+          </label>
+
+          <label class="field">
+            <span>Storm duration (min)</span>
+            <input id="duration-input" type="range" min="15" max="180" step="5" />
+            <strong id="duration-value"></strong>
+          </label>
+
+          <label class="field">
+            <span>Burn severity</span>
+            <select id="severity-input">
+              <option value="low">Low</option>
+              <option value="moderate">Moderate</option>
+              <option value="high">High</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Soil texture</span>
+            <select id="soil-input">
+              <option value="sandy">Sandy</option>
+              <option value="loam">Loam</option>
+              <option value="clay">Clay</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Surface roughness (Manning n x100)</span>
+            <input id="roughness-input" type="range" min="2" max="12" step="1" />
+            <strong id="roughness-value"></strong>
+          </label>
+
+          <label class="field">
+            <span>Particle count</span>
+            <input id="particles-input" type="range" min="200" max="4000" step="100" />
+            <strong id="particles-value"></strong>
+          </label>
+
+          <div class="actions">
+            <button id="simulate-button">Run simulation</button>
+            <button id="flyover-button" class="secondary">Fly to source</button>
+          </div>
+
+          <p class="hint">
+            Click the map to move the burn scar source. The model samples the
+            elevation grid around that point before routing runoff particles.
+          </p>
+        </section>
+
+        <section class="panel">
+          <h2>Model notes</h2>
+          <ul class="notes">
+            <li>Terrain is sampled from public Terrarium DEM tiles.</li>
+            <li>Runoff uses burn-adjusted infiltration excess.</li>
+            <li>Routing blends terrain gradients, D8 flow, and Manning-style velocity.</li>
+            <li>Heat colors show repeated particle passage and likely flood corridors.</li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <h2>Warning summary</h2>
+          <div id="summary" class="summary">
+            Configure a scenario and run the simulation to estimate likely
+            downslope warning zones.
+          </div>
+        </section>
+
+        <footer class="panel disclaimer">
+          <strong>Important:</strong>
+          This is a planning and educational prototype, not a certified
+          evacuation or regulatory flood model.
+        </footer>
+      </aside>
+
+      <main class="map-shell">
+        <div id="map"></div>
+        <canvas id="overlay"></canvas>
+
+        <div class="map-card legend">
+          <h3>Hazard intensity</h3>
+          <div class="legend-scale">
+            <span>Low</span>
+            <div class="gradient"></div>
+            <span>High</span>
+          </div>
+          <p>Yellow-orange-red cells show concentrated runoff pathways.</p>
+        </div>
+
+        <div class="map-card status" id="status">
+          Loading terrain viewer...
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
